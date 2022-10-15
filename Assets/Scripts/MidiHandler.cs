@@ -1,4 +1,5 @@
 using System;
+using Minis;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,28 +41,7 @@ public class MidiHandler : MonoBehaviour
                 // White keys go from A0 to C8 with 2 char shortDisplayName
                 if (note.shortDisplayName.Length == 2)
                 {
-                    int octavePos = "CDEFGAB".IndexOf(note.shortDisplayName[0]);
-                    int octaveMultiplier = Int32.Parse(note.shortDisplayName[1].ToString());
-
-                    // Find note (0-51 should be i hope)
-                    int noteIndex = ((octaveMultiplier - 1) * 7) + octavePos + 2;
-
-                    // A and B are the only ones in 0 lol
-                    // Likewise for C8
-                    if (note.shortDisplayName.Equals("A0"))
-                    {
-                        noteIndex = 0;
-                    } else if (note.shortDisplayName.Equals("B0"))
-                    {
-                        noteIndex = 1;
-                    } else if (note.shortDisplayName.Equals("C8"))
-                    {
-                        noteIndex = 51;
-                    }
-
-                    Debug.Log($"Note index {noteIndex}");
-                    
-                    keyboardRenderer.whiteKeys[noteIndex].GetComponent<MeshRenderer>().material =
+                    keyboardRenderer.whiteKeys[getWhiteKeyIndex(note)].GetComponent<MeshRenderer>().material =
                         keyboardRenderer.whiteKeyPressedMaterial;
                 }
             };
@@ -79,28 +59,33 @@ public class MidiHandler : MonoBehaviour
                 // White keys go from A0 to C8 with 2 char shortDisplayName
                 if (note.shortDisplayName.Length == 2)
                 {
-                    int octavePos = "CDEFGAB".IndexOf(note.shortDisplayName[0]);
-                    int octaveMultiplier = Int32.Parse(note.shortDisplayName[1].ToString());
-
-                    // Find note (0-52 should be i hope)
-                    int noteIndex = ((octaveMultiplier - 1) * 7) + octavePos + 2;
-                    
-                    // A and B are the only ones in 0 lol
-                    if (note.shortDisplayName.Equals("A0"))
-                    {
-                        noteIndex = 0;
-                    } else if (note.shortDisplayName.Equals("B0"))
-                    {
-                        noteIndex = 1;
-                    } else if (note.shortDisplayName.Equals("C8"))
-                    {
-                        noteIndex = 51;
-                    }
-
-                    keyboardRenderer.whiteKeys[noteIndex].GetComponent<MeshRenderer>().material =
+                    keyboardRenderer.whiteKeys[getWhiteKeyIndex(note)].GetComponent<MeshRenderer>().material =
                         keyboardRenderer.whiteKeyMaterial;
                 }
             };
         };
+    }
+
+    int getWhiteKeyIndex(MidiNoteControl note)
+    {
+        int octavePos = "CDEFGAB".IndexOf(note.shortDisplayName[0]);
+        int octaveMultiplier = Int32.Parse(note.shortDisplayName[1].ToString());
+
+        // Find note (0-52 should be i hope)
+        int noteIndex = ((octaveMultiplier - 1) * 7) + octavePos + 2;
+                    
+        // A and B are the only ones in 0 lol
+        if (note.shortDisplayName.Equals("A0"))
+        {
+            noteIndex = 0;
+        } else if (note.shortDisplayName.Equals("B0"))
+        {
+            noteIndex = 1;
+        } else if (note.shortDisplayName.Equals("C8"))
+        {
+            noteIndex = 51;
+        }
+
+        return noteIndex;
     }
 }
