@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class KeyboardRenderer : MonoBehaviour
@@ -5,16 +6,19 @@ public class KeyboardRenderer : MonoBehaviour
     private GameObject cube;
     private GameObject pianoParent;
     public GameObject[] whiteKeys = new GameObject[52];
+    public GameObject[] blackKeys = new GameObject[36];
     
     // Materials for keys
     public Material whiteKeyMaterial;
     public Material whiteKeyPressedMaterial;
+    public Material blackKeyMaterial;
 
     void Start()
     {
         // Make materials
         whiteKeyMaterial = (Material)Resources.Load("White Piano Key", typeof(Material));
         whiteKeyPressedMaterial = (Material)Resources.Load("White Piano Key Pressed", typeof(Material));
+        blackKeyMaterial = (Material)Resources.Load("Black Piano Key", typeof(Material));
         
         // Initiate parent GameObject for piano
         pianoParent = new GameObject("Piano");
@@ -24,22 +28,22 @@ public class KeyboardRenderer : MonoBehaviour
         for (int i = 0; i < 52; i++)
         {
             // Create the new key
-            GameObject newKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject newWhiteKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
             
             // x = wide, y = deep, z = long
-            newKey.transform.localScale = new Vector3(0.0231F, 0.01F, 0.133F);
+            newWhiteKey.transform.localScale = new Vector3(0.0231F, 0.01F, 0.133F);
             
             // position time (keyboard scales along x axis)
-            newKey.transform.position = new Vector3(0.0231F * i, 0, 0);
+            newWhiteKey.transform.position = new Vector3(0.0231F * i, 0, 0);
             
             // Apply the material
-            newKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
+            newWhiteKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
             
             // Parent cube to piano so they move together
-            newKey.transform.parent = pianoParent.transform;
+            newWhiteKey.transform.parent = pianoParent.transform;
             
             // Add to the array
-            whiteKeys[i] = newKey;
+            whiteKeys[i] = newWhiteKey;
 
         }
 
@@ -47,45 +51,45 @@ public class KeyboardRenderer : MonoBehaviour
         for (int i = 0; i < 36; i++)
         {
             // Create the new key
-            GameObject newKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject newBlackKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
             
             // x = wide, y = deep, z = long
-            newKey.transform.localScale = new Vector3(0.014F, 0.02F, 0.08F);
+            newBlackKey.transform.localScale = new Vector3(0.014F, 0.02F, 0.08F);
             
             if ((i % 5) == 0)
             {
                 // position time (keyboard scales along x axis)
-                newKey.transform.position = new Vector3((0.1617F * Math.Floor(i / 5)) + 0.015F, 0.01F, 0.076F);
+                newBlackKey.transform.position = new Vector3((0.1617F * (float)Math.Floor((i / 5F))) + 0.015F, 0.01F, 0.027F);
             }
             else if ((i % 5) == 1)
             {
                 // position time (keyboard scales along x axis)
-                newKey.transform.position = new Vector3((0.1617F * Math.Floor(i / 5)) + 0.058F, 0.01F, 0.076F);
+                newBlackKey.transform.position = new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.058F), 0.01F, 0.027F);
             }
             else if ((i % 5) == 2)
             {
                 // position time (keyboard scales along x axis)
-                newKey.transform.position = new Vector3((0.1617F * Math.Floor(i / 5)) + 0.087F, 0.01F, 0.076F);
+                newBlackKey.transform.position = new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.087F), 0.01F, 0.027F);
             }
             else if ((i % 5) == 3)
             {
                 // position time (keyboard scales along x axis)
-                newKey.transform.position = new Vector3((0.1617F * Math.Floor(i / 5)) + 0.126F, 0.01F, 0.076F);
+                newBlackKey.transform.position = new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.126F), 0.01F, 0.027F);
             }
             else if ((i % 5) == 4)
             {
                 // position time (keyboard scales along x axis)
-                newKey.transform.position = new Vector3((0.1617F * Math.Floor(i / 5)) + 0.152F, 0.01F, 0.076F);
+                newBlackKey.transform.position = new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.152F), 0.01F, 0.027F);
             }
             
             // Apply the material
-            newKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
+            newBlackKey.GetComponent<MeshRenderer>().material = blackKeyMaterial;
             
             // Parent cube to piano so they move together
-            newKey.transform.parent = pianoParent.transform;
+            newBlackKey.transform.parent = pianoParent.transform;
             
             // Add to the array
-            whiteKeys[i] = newKey;
+            blackKeys[i] = newBlackKey;
 
         }
 
