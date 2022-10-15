@@ -33,10 +33,10 @@ public class KeyboardRenderer : MonoBehaviour
             GameObject newWhiteKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
             // x = wide, y = deep, z = long
-            newWhiteKey.transform.localScale = new Vector3(0.0231F, 0.01F, 0.133F);
+            newWhiteKey.transform.localScale = new Vector3(0.023F, 0.01F, 0.133F);
 
             // position time (keyboard scales along x axis)
-            newWhiteKey.transform.position = new Vector3(0.0231F * i - 1.2F, -0.035F, -0.12F);
+            newWhiteKey.transform.position = new Vector3(0.023F * i - 1.2F, -0.035F, -0.12F);
 
             // Apply the material
             newWhiteKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
