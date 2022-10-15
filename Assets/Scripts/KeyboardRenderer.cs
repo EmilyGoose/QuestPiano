@@ -1,13 +1,21 @@
 using UnityEngine;
 
-public class TrackerTest : MonoBehaviour
+public class KeyboardRenderer : MonoBehaviour
 {
     private GameObject cube;
     private GameObject pianoParent;
-    private GameObject[] whiteKeys = new GameObject[52];
+    public GameObject[] whiteKeys = new GameObject[52];
+    
+    // Materials for keys
+    public Material whiteKeyMaterial;
+    public Material whiteKeyPressedMaterial;
 
     void Start()
     {
+        // Make materials
+        whiteKeyMaterial = (Material)Resources.Load("White Piano Key", typeof(Material));
+        whiteKeyPressedMaterial = (Material)Resources.Load("White Piano Key Pressed", typeof(Material));
+        
         // Initiate parent GameObject for piano
         pianoParent = new GameObject("Piano");
         pianoParent.transform.position = new Vector3(0, 0, 0);
@@ -24,8 +32,14 @@ public class TrackerTest : MonoBehaviour
             // position time (keyboard scales along x axis)
             newKey.transform.position = new Vector3(0.0231F * i, 0, 0);
             
+            // Apply the material
+            newKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
+            
             // Parent cube to piano so they move together
             newKey.transform.parent = pianoParent.transform;
+            
+            // Add to the array
+            whiteKeys[i] = newKey;
 
         }
 
