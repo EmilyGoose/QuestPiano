@@ -1,11 +1,16 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Minis;
+using Unity.Template.VR;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MoodHandler : MonoBehaviour
 {
     // Start is called before the first frame update
+    private KeyBuffer _keyBuffer = new KeyBuffer();
+    
     void Start()
     {
         // Listen for MIDI device changes
@@ -27,6 +32,8 @@ public class MoodHandler : MonoBehaviour
                     (note.device as Minis.MidiDevice)?.channel,
                     note.device.description.product
                 ));
+                
+                _keyBuffer.addKey(note);
             };
 
             midiDevice.onWillNoteOff += (note) =>
@@ -46,6 +53,13 @@ public class MoodHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        StartCoroutine(processKeyBuffer());
+    }
+
+    IEnumerator processKeyBuffer()
+    {
+        yield return new WaitForSeconds(2);
+        Debug.Log("help");
+        _keyBuffer.processNotes();
     }
 }

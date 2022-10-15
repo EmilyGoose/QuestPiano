@@ -102,29 +102,6 @@ public class KeyboardRenderer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool isTracked = OVRInput.GetControllerPositionTracked(OVRInput.Controller.LHand);
-
-        // Only update piano position if controller is active
-        // This prevents the weird thing where it jumps to origin
         
-        // returns a float of the left index finger trigger’s current state. (0-1)
-        float triggerPos = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger);
-        
-        if (triggerPos > 0.5F)
-        {
-            // Match piano position to controller
-            Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
-            pianoParent.transform.position = controllerPosition;
-
-            // Rotate piano on y axis only
-            Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTouch);
-            float yRotation = controllerRotation.y;
-            float whatTheHellIsW = controllerRotation.w;
-            
-            Quaternion pianoRotation = new Quaternion(0F, yRotation, 0F, whatTheHellIsW);
-            // Offset rotation by 25deg to align then flip 180
-            pianoParent.transform.rotation = pianoRotation * Quaternion.Euler(0, 25 + 180, 0);
-            
-        }
     }
 }
