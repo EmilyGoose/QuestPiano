@@ -12,7 +12,7 @@ public class MidiHandler : MonoBehaviour
     {
         // Get keyboard renderer script
         keyboardRenderer = gameObject.GetComponent<KeyboardRenderer>();
-        
+
         // Listen for MIDI device changes
         InputSystem.onDeviceChange += (device, change) =>
         {
@@ -41,8 +41,13 @@ public class MidiHandler : MonoBehaviour
                 // White keys go from A0 to C8 with 2 char shortDisplayName
                 if (note.shortDisplayName.Length == 2)
                 {
-                    keyboardRenderer.whiteKeys[getWhiteKeyIndex(note)].GetComponent<MeshRenderer>().material =
+                    keyboardRenderer.whiteKeys[GetWhiteKeyIndex(note)].GetComponent<MeshRenderer>().material =
                         keyboardRenderer.whiteKeyPressedMaterial;
+                }
+                else if (note.shortDisplayName.Length == 3)
+                {
+                    keyboardRenderer.blackKeys[GetBlackKeyIndex(note)].GetComponent<MeshRenderer>().material =
+                        keyboardRenderer.blackKeyPressedMaterial;
                 }
             };
 
@@ -59,33 +64,53 @@ public class MidiHandler : MonoBehaviour
                 // White keys go from A0 to C8 with 2 char shortDisplayName
                 if (note.shortDisplayName.Length == 2)
                 {
-                    keyboardRenderer.whiteKeys[getWhiteKeyIndex(note)].GetComponent<MeshRenderer>().material =
+                    keyboardRenderer.whiteKeys[GetWhiteKeyIndex(note)].GetComponent<MeshRenderer>().material =
                         keyboardRenderer.whiteKeyMaterial;
+                }
+                else if (note.shortDisplayName.Length == 3)
+                {
+                    keyboardRenderer.blackKeys[GetBlackKeyIndex(note)].GetComponent<MeshRenderer>().material =
+                        keyboardRenderer.blackKeyMaterial;
                 }
             };
         };
     }
 
-    int getWhiteKeyIndex(MidiNoteControl note)
+    int GetWhiteKeyIndex(MidiNoteControl note)
     {
         int octavePos = "CDEFGAB".IndexOf(note.shortDisplayName[0]);
         int octaveMultiplier = Int32.Parse(note.shortDisplayName[1].ToString());
 
         // Find note (0-52 should be i hope)
         int noteIndex = ((octaveMultiplier - 1) * 7) + octavePos + 2;
-                    
+
         // A and B are the only ones in 0 lol
         if (note.shortDisplayName.Equals("A0"))
         {
             noteIndex = 0;
-        } else if (note.shortDisplayName.Equals("B0"))
+        }
+        else if (note.shortDisplayName.Equals("B0"))
         {
             noteIndex = 1;
-        } else if (note.shortDisplayName.Equals("C8"))
+        }
+        else if (note.shortDisplayName.Equals("C8"))
         {
             noteIndex = 51;
         }
 
         return noteIndex;
+    }
+
+    int GetBlackKeyIndex(MidiNoteControl note)
+    {
+        if (note.shortDisplayName.Equals("A#0"))
+        {
+            return 0;
+        }
+
+        int notePos = "CDFGA".IndexOf(note.shortDisplayName[0]);
+        int octaveMultiplier = Int32.Parse(note.shortDisplayName[2].ToString());
+
+        return ((octaveMultiplier - 1) * 5) + notePos + 1;
     }
 }

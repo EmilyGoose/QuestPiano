@@ -12,6 +12,7 @@ public class KeyboardRenderer : MonoBehaviour
     public Material whiteKeyMaterial;
     public Material whiteKeyPressedMaterial;
     public Material blackKeyMaterial;
+    public Material blackKeyPressedMaterial;
 
     void Start()
     {
@@ -19,6 +20,7 @@ public class KeyboardRenderer : MonoBehaviour
         whiteKeyMaterial = (Material)Resources.Load("White Piano Key", typeof(Material));
         whiteKeyPressedMaterial = (Material)Resources.Load("White Piano Key Pressed", typeof(Material));
         blackKeyMaterial = (Material)Resources.Load("Black Piano Key", typeof(Material));
+        blackKeyPressedMaterial = (Material)Resources.Load("Black Piano Key Pressed", typeof(Material));
 
         // Initiate parent GameObject for piano
         pianoParent = new GameObject("Piano");
