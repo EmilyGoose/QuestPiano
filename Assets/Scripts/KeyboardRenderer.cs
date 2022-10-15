@@ -110,6 +110,7 @@ public class KeyboardRenderer : MonoBehaviour
         Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LHand);
         float yRotation = controllerRotation.y;
         float whatTheHellIsW = controllerRotation.w;
+        // offset by 25deg to be properly aligned
         Quaternion pianoRotation = new Quaternion(0F, yRotation, 0F, whatTheHellIsW);
         pianoParent.transform.rotation = pianoRotation;
     }
