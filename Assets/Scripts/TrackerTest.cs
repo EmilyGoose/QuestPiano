@@ -39,6 +39,8 @@ public class TrackerTest : MonoBehaviour
     void Update()
     {
         Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LHand);
-        cube.transform.position = controllerPosition;
+        Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LHand);
+        pianoParent.transform.position = controllerPosition;
+        pianoParent.transform.rotation = controllerRotation;
     }
 }
