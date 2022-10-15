@@ -43,6 +43,52 @@ public class KeyboardRenderer : MonoBehaviour
 
         }
 
+        // Create 36 black keys and parent them to GameObject
+        for (int i = 0; i < 36; i++)
+        {
+            // Create the new key
+            GameObject newKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            
+            // x = wide, y = deep, z = long
+            newKey.transform.localScale = new Vector3(0.014F, 0.02F, 0.08F);
+            
+            if ((i % 5) = 0)
+            {
+                // position time (keyboard scales along x axis)
+                newKey.transform.position = new Vector3((0.1617F * i) + 0.015F, 0, 0.053F);
+            }
+            else ((i % 5) = 1)
+            {
+                // position time (keyboard scales along x axis)
+                newKey.transform.position = new Vector3((0.1617F * i) + 0.058F, 0, 0.053F);
+            }
+            else ((i % 5) = 2)
+            {
+                // position time (keyboard scales along x axis)
+                newKey.transform.position = new Vector3((0.1617F * i) + 0.087F, 0, 0.053F);
+            }
+            else ((i % 5) = 3)
+            {
+                // position time (keyboard scales along x axis)
+                newKey.transform.position = new Vector3((0.1617F * i) + 0.126F, 0, 0.053F);
+            }
+            else ((i % 5) = 4)
+            {
+                // position time (keyboard scales along x axis)
+                newKey.transform.position = new Vector3((0.1617F * i) + 0.152F, 0, 0.053F);
+            }
+            
+            // Apply the material
+            newKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
+            
+            // Parent cube to piano so they move together
+            newKey.transform.parent = pianoParent.transform;
+            
+            // Add to the array
+            whiteKeys[i] = newKey;
+
+        }
+
 
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = new Vector3(0, 0.5f, 0);
