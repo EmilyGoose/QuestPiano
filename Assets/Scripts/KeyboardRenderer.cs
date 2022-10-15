@@ -102,9 +102,15 @@ public class KeyboardRenderer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Match piano position to controller
         Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LHand);
-        Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LHand);
         pianoParent.transform.position = controllerPosition;
-        pianoParent.transform.rotation = controllerRotation;
+        
+        // Rotate piano on y axis only
+        Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LHand);
+        float yRotation = controllerRotation.y;
+        float whatTheHellIsW = controllerRotation.w;
+        Quaternion pianoRotation = new Quaternion(0F, yRotation, 0F, whatTheHellIsW);
+        pianoParent.transform.rotation = pianoRotation;
     }
 }
