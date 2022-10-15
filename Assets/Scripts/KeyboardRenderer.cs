@@ -97,11 +97,6 @@ public class KeyboardRenderer : MonoBehaviour
             // Add to the array
             blackKeys[i] = newBlackKey;
         }
-
-
-        cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0, 0.5f, 0);
-        cube.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
     }
 
     // Update is called once per frame
