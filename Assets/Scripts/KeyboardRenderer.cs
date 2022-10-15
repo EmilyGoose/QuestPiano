@@ -34,7 +34,7 @@ public class KeyboardRenderer : MonoBehaviour
             newWhiteKey.transform.localScale = new Vector3(0.0231F, 0.01F, 0.133F);
 
             // position time (keyboard scales along x axis)
-            newWhiteKey.transform.position = new Vector3(0.0231F * i, 0, 0);
+            newWhiteKey.transform.position = new Vector3(0.0231F * i - 1.2F, -0.035F, -0.12F);
 
             // Apply the material
             newWhiteKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
@@ -53,37 +53,37 @@ public class KeyboardRenderer : MonoBehaviour
             GameObject newBlackKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
             // x = wide, y = deep, z = long
-            newBlackKey.transform.localScale = new Vector3(0.014F, 0.02F, 0.08F);
+            newBlackKey.transform.localScale = new Vector3(0.014F, 0.005F, 0.08F);
 
             if ((i % 5) == 0)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((0.1617F * (float)Math.Floor((i / 5F))) + 0.015F, 0.01F, 0.027F);
+                    new Vector3((0.1617F * (float)Math.Floor((i / 5F))) + 0.015F - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 1)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.058F), 0.01F, 0.027F);
+                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.058F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 2)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.087F), 0.01F, 0.027F);
+                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.087F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 3)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.126F), 0.01F, 0.027F);
+                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.126F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 4)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.152F), 0.01F, 0.027F);
+                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.152F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
 
             // Apply the material
@@ -109,20 +109,24 @@ public class KeyboardRenderer : MonoBehaviour
 
         // Only update piano position if controller is active
         // This prevents the weird thing where it jumps to origin
-        if (isTracked)
+        
+        // returns a float of the left index finger trigger’s current state. (0-1)
+        float triggerPos = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger);
+        
+        if (triggerPos > 0.5F)
         {
             // Match piano position to controller
-            Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LHand);
+            Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
             pianoParent.transform.position = controllerPosition;
 
             // Rotate piano on y axis only
-            Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LHand);
+            Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTouch);
             float yRotation = controllerRotation.y;
             float whatTheHellIsW = controllerRotation.w;
             
             Quaternion pianoRotation = new Quaternion(0F, yRotation, 0F, whatTheHellIsW);
-            // Offset rotation by 25deg to align
-            pianoParent.transform.rotation = pianoRotation * Quaternion.Euler(0, 25, 0);
+            // Offset rotation by 25deg to align then flip 180
+            pianoParent.transform.rotation = pianoRotation * Quaternion.Euler(0, 25 + 180, 0);
             
         }
     }
