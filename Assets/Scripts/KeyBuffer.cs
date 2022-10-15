@@ -3,63 +3,80 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using Unity.VisualScripting;
 using UnityEngine;
 
 
     public class KeyBuffer
     {
-        private List<KeyboardPress> noteCounter = new List<KeyboardPress>();
-            
+        private List<KeyboardPress> noteBuffer;
+        private List<int> noteNums;
+        private List<int> noteIntervals;
+
+        public KeyBuffer()
+        {
+            noteBuffer = new List<KeyboardPress>();
+        }
+        
         public void addKey(MidiNoteControl note)
         {
-            noteCounter.Add(new KeyboardPress(note));
-            Debug.Log("new note added");
+            KeyboardPress newPress = new KeyboardPress(note);
+            noteBuffer.Add(newPress);
+            // Debug.Log("new note added");
             // array is two or more -> set interval
-            // if (noteCounter.Count > 1)
-            // {
-            //     noteCounter[-1].SetInterval(noteCounter[-2]);
-            // }
+            if (noteBuffer.Count > 1)
+            {
+                noteBuffer[noteBuffer.Count - 1].SetInterval(noteBuffer[noteBuffer.Count - 2]);
+            }
         }
 
         List<int> getIntervals()
         {
             // i like functional programming and i wish C# had more of this
-            return noteCounter.Select(note => note.GetInterval()).ToList();
+            return noteBuffer.Select(note => note.GetInterval()).ToList();
         }
 
         List<int> getNoteNumbers()
         {
-            return noteCounter.Select((note => note.Note.noteNumber)).ToList();
+            Debug.Log("counting numbers");
+            Debug.Log(noteBuffer.Count);
+            return noteBuffer.Select(note => note.getNote().noteNumber).ToList();
         }
 
         double getNoteAverage()
         {
-            return getNoteNumbers().Average();
+            return noteNums.Average();
         }
 
         int getNoteMax()
         {
-            return getNoteNumbers().Max();
+            return noteNums.Max();
         }
 
         int getNoteMin()
         {
-            return getNoteNumbers().Min();
+            return noteNums.Min();
         }
         
-        public void processNotes()
+        public void processNotes(object sender, ElapsedEventArgs e)
         {
+            Debug.Log("notes processing");
             // get averages
-            Debug.Log(getIntervals());
-            Debug.Log(getNoteNumbers());
-            Debug.Log(noteCounter.Count);
-            Debug.Log(getNoteAverage());
-            Debug.Log(getNoteMax());
-            Debug.Log(getNoteMin());
-            
-            // clear after all of that 
-            noteCounter.Clear();
+            if (noteBuffer.Count != 0)
+            {
+                Debug.Log(noteBuffer.Count);
+                noteNums = getNoteNumbers();
+                noteIntervals = getIntervals();
+                foreach( var x in noteNums) Debug.Log( x.ToString());
+                foreach( var x in noteIntervals) Debug.Log( x.ToString());
+                Debug.Log(getNoteAverage());
+                Debug.Log(getNoteMax());
+                Debug.Log(getNoteMin());
+
+                // clear after all of that 
+                noteBuffer = new List<KeyboardPress>();
+            }
         }
 
     }

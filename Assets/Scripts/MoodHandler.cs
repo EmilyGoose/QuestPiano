@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using Minis;
 using Unity.Template.VR;
 using UnityEngine;
@@ -9,10 +10,16 @@ using UnityEngine.InputSystem;
 public class MoodHandler : MonoBehaviour
 {
     // Start is called before the first frame update
-    private KeyBuffer _keyBuffer = new KeyBuffer();
+    private KeyBuffer _keyBuffer;
+    private Timer _intervalTimer;
     
     void Start()
     {
+        _keyBuffer = new KeyBuffer();
+        _intervalTimer = new Timer(2000);
+        _intervalTimer.Start();
+        _intervalTimer.Elapsed += _keyBuffer.processNotes;
+        
         // Listen for MIDI device changes
         InputSystem.onDeviceChange += (device, change) =>
         {
@@ -24,28 +31,13 @@ public class MoodHandler : MonoBehaviour
             midiDevice.onWillNoteOn += (note, velocity) =>
             {
                 // Key pressed
-                Debug.Log(string.Format(
-                    "Note On #{0} ({1}) vel:{2:0.00} ch:{3} dev:'{4}'",
-                    note.noteNumber,
-                    note.shortDisplayName,
-                    velocity,
-                    (note.device as Minis.MidiDevice)?.channel,
-                    note.device.description.product
-                ));
-                
                 _keyBuffer.addKey(note);
             };
 
             midiDevice.onWillNoteOff += (note) =>
             {
                 // Key released
-                Debug.Log(string.Format(
-                    "Note Off #{0} ({1}) ch:{2} dev:'{3}'",
-                    note.noteNumber,
-                    note.shortDisplayName,
-                    (note.device as Minis.MidiDevice)?.channel,
-                    note.device.description.product
-                ));
+                // nothing for now
             };
         };
     }
@@ -53,13 +45,7 @@ public class MoodHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(processKeyBuffer());
+        
     }
 
-    IEnumerator processKeyBuffer()
-    {
-        yield return new WaitForSeconds(2);
-        Debug.Log("help");
-        _keyBuffer.processNotes();
-    }
 }

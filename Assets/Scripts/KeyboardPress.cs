@@ -23,8 +23,11 @@ using Minis;
 
         public void SetInterval(KeyboardPress prev)
         {
-            interval = prev.note.noteNumber - this.note.noteNumber;
+            interval = this.note.noteNumber - prev.note.noteNumber;
         }
-        
-        public MidiNoteControl Note { get; set; }
+
+        public MidiNoteControl getNote()
+        {
+            return note;
+        }
     }
