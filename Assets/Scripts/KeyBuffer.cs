@@ -13,7 +13,7 @@ using UnityEngine;
         private List<KeyboardPress> noteBuffer;
         private List<int> noteNums;
         private List<int> noteIntervals;
-        private List<DateTime> noteTimes;
+        private List<TimeSpan> noteTimeDifferences;
 
         public KeyBuffer()
         {
@@ -42,43 +42,45 @@ using UnityEngine;
             return noteIntervals;
         }
 
-        public List<DateTime> getNoteTimes()
+        public List<TimeSpan> getNoteTimeDifferences()
         {
-            return noteTimes;
+            return noteTimeDifferences;
         }
 
-        List<int> getIntervals()
+        List<int> calculateIntervals()
         {
             // i like functional programming and i wish C# had more of this
             return noteBuffer.Select(note => note.GetInterval()).ToList();
         }
-        List<DateTime> getTimestamps()
+        List<TimeSpan> calculateDifferences()
         {
             // i like functional programming and i wish C# had more of this
-            return noteBuffer.Select(note => note.getPressTime()).ToList();
+            List<DateTime> pressTimes = noteBuffer.Select(note => note.getPressTime()).ToList();
+            List<TimeSpan> pressTimeDifferences = new List<TimeSpan>(); 
+            
+            // time difference between first element in array and nonexistent zeroth element is always 0
+            pressTimeDifferences.Add(TimeSpan.Zero);
+            
+            for (int i = 1; i < pressTimes.Count; i++)
+            {
+                // the difference in time between the current element and the previous one
+                pressTimeDifferences.Add(pressTimes[i] - pressTimes[i - 1]);
+            }
+
+            return pressTimeDifferences;
         }
-        public List<int> getNoteNumbers()
+        public List<int> calculateNoteNumbers()
         {
             Debug.Log("counting numbers");
             Debug.Log(noteBuffer.Count);
             return noteBuffer.Select(note => note.getNote().noteNumber).ToList();
         }
 
-        public double getNoteAverage()
+        public void clearNoteBuffer()
         {
-            return noteNums.Average();
+            noteBuffer = new List<KeyboardPress>();
         }
 
-        public int getNoteMax()
-        {
-            return noteNums.Max();
-        }
-
-        public int getNoteMin()
-        {
-            return noteNums.Min();
-        }
-        
         public void processNotes()
         {
             Debug.Log("notes processing");
@@ -86,12 +88,9 @@ using UnityEngine;
             if (noteBuffer.Count != 0)
             {
                 // set up arrays to be accessed
-                noteNums = getNoteNumbers();
-                noteIntervals = getIntervals();
-                noteTimes = getTimestamps();
-
-                // clear after all of that 
-                noteBuffer = new List<KeyboardPress>();
+                noteNums = calculateNoteNumbers();
+                noteIntervals = calculateIntervals();
+                noteTimeDifferences = calculateDifferences();
             }
         }
 

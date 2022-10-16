@@ -11,14 +11,11 @@ public class MoodHandler : MonoBehaviour
 {
     // Start is called before the first frame update
     private KeyBuffer _keyBuffer;
-    private Timer _intervalTimer;
+    private bool hasPressedButton;
     
     void Start()
     {
         _keyBuffer = new KeyBuffer();
-        _intervalTimer = new Timer(2000);
-        _intervalTimer.Start();
-        _intervalTimer.Elapsed += processMood;
         
         // Listen for MIDI device changes
         InputSystem.onDeviceChange += (device, change) =>
@@ -45,19 +42,31 @@ public class MoodHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!hasPressedButton)
+        {
+            StartCoroutine(processMood());
+        }
     }
+    
+    
 
-    void processMood(object sender, ElapsedEventArgs e)
+    IEnumerator processMood()
     {
-        // updates things
+        // wait two seconds
+        yield return new WaitForSecondsRealtime(2);
+        
+        // generate data arrays
         _keyBuffer.processNotes();
         
         // add logic here
         // you can use these getters
-        _keyBuffer.getNoteNums(); // the corresponding MIDI numbers
-        _keyBuffer.getNoteTimes(); // DateTime of when the key was pressed
-        _keyBuffer.getNoteIntervals(); // semitones between the current and last note
+        // _keyBuffer.getNoteNums(); // the corresponding MIDI numbers
+        // _keyBuffer.getNoteTimeDifferences(); // difference in DateTime of when the key was pressed
+        // _keyBuffer.getNoteIntervals(); // semitones between the current and last note
+        
+        // after scripts are called/logic is done then clear array and listen for button press again
+        _keyBuffer.clearNoteBuffer();   
+        hasPressedButton = false;
     }
     
 }
