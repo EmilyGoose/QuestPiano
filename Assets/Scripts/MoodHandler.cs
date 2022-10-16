@@ -164,7 +164,7 @@ public class MoodHandler : MonoBehaviour
                 {
                     butterfly.GetComponent<ButterflyScript>().RunAway();
                     // Debris time
-                    Destroy(butterfly, 5F);
+                    Destroy(butterfly, 10F);
                 }
 
                 // Reset list to get rid of all the dead butterflies
