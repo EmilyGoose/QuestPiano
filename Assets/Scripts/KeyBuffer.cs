@@ -8,11 +8,14 @@ public class KeyBuffer
         private List<KeyboardPress> _noteBuffer;
         private List<int> _noteNumbers;
         private List<int> _noteIntervals;
-        private List<TimeSpan> _timeDifferences;
+        private TimeSpan[] _timeDifferences;
 
         public KeyBuffer()
         {
             _noteBuffer = new List<KeyboardPress>();
+            _noteIntervals = new List<int>();
+            _noteNumbers = new List<int>();
+            _timeDifferences = new TimeSpan[5];
         }
         
         public void AddKey(MidiNoteControl note)
@@ -35,7 +38,7 @@ public class KeyBuffer
 
         public List<int> NoteIntervals => _noteIntervals;
 
-        public List<TimeSpan> TimeDifferences => _timeDifferences;
+        public TimeSpan[] TimeDifferences => _timeDifferences;
 
         public int Count()
         {
@@ -61,7 +64,7 @@ public class KeyBuffer
         public void GenerateTimeDifferences()
         {
             // clear just in case
-            _timeDifferences.Clear();
+            // _timeDifferences.Clear();
             
             // set the first element to 0
             _timeDifferences[0] = TimeSpan.Zero;
@@ -86,7 +89,7 @@ public class KeyBuffer
             _noteBuffer = new List<KeyboardPress>();
             _noteIntervals = new List<int>();
             _noteNumbers = new List<int>();
-            _timeDifferences = new List<TimeSpan>();
+            _timeDifferences = new TimeSpan[5];
         }
 
         // takes the first element out of the array, adds the newest to the end, 
