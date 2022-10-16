@@ -1,38 +1,41 @@
 using System;
 using System.Collections.Generic;
 using Minis;
+using UnityEditor.Search;
 
-    public class KeyboardPress
+public class KeyboardPress
     {
-        private MidiNoteControl note;
-        private DateTime pressTime;
+        private int _noteNumber;
+        private DateTime _pressTime;
         // semitones between current note and note before
-        private int interval;
+        private int _interval;
 
         public KeyboardPress(MidiNoteControl n)
         {
-            note = n;
-            pressTime = DateTime.Now;
-            interval = 0;
+            _noteNumber = n.noteNumber;
+            _pressTime = DateTime.Now;
+            _interval = 0;
+        }
+        
+        // getters and setters start here
+        public int NoteNumber
+        {
+            get { return _noteNumber;  }
         }
 
-        public int GetInterval()
+        public DateTime PressTime
         {
-            return interval;
+            get { return _pressTime;  }
+        }
+
+        public int Interval
+        {
+            get { return _interval;  }
+            set { _interval = value;  }
         }
 
         public void SetInterval(KeyboardPress prev)
         {
-            interval = this.note.noteNumber - prev.note.noteNumber;
-        }
-
-        public MidiNoteControl getNote()
-        {
-            return note;
-        }
-
-        public DateTime getPressTime()
-        {
-            return pressTime;
+            _interval = this._noteNumber - prev.NoteNumber;
         }
     }

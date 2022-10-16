@@ -11,8 +11,9 @@ public class MoodHandler : MonoBehaviour
 {
     // Start is called before the first frame update
     private KeyBuffer _keyBuffer;
-    private bool hasPressedButton;
-    
+    private bool _isListening;
+    private float _timer = 0.0f;
+
     void Start()
     {
         _keyBuffer = new KeyBuffer();
@@ -25,16 +26,28 @@ public class MoodHandler : MonoBehaviour
             var midiDevice = device as Minis.MidiDevice;
             if (midiDevice == null) return;
 
-            midiDevice.onWillNoteOn += (note, velocity) =>
+            midiDevice.onWillNoteOn += (note, _) =>
             {
-                // Key pressed
-                _keyBuffer.addKey(note);
-            };
-
-            midiDevice.onWillNoteOff += (note) =>
-            {
-                // Key released
-                // nothing for now
+                // On key press:
+                // if less than 5 keys, just regularly add a key
+                // else, start actively listening and calculating statistic arrays
+                if (!_isListening) 
+                {
+                    _keyBuffer.AddKey(note);
+                }
+                else
+                {
+                    _timer = 0.0f;
+                    _keyBuffer.Enqueue(note);
+                    ProcessMood();
+                }
+                
+                // only happens once, initial change
+                if (_keyBuffer.Count() != 5 || _isListening) return;
+                _timer = 0.0f;
+                _isListening = true;
+                _keyBuffer.CalculateArrays();
+                ProcessMood();
             };
         };
     }
@@ -42,10 +55,14 @@ public class MoodHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!hasPressedButton)
+        _timer += Time.deltaTime;
+        // check if timer has reached 2 seconds
+        if (_timer > 2f)
         {
-            hasPressedButton = true;
-            StartCoroutine(processMood());
+            // if so, stop listening for input
+            _isListening = false;
+            // and clear all arrays
+            _keyBuffer.ClearArrays();
         }
     }
     
@@ -53,20 +70,14 @@ public class MoodHandler : MonoBehaviour
 
     IEnumerator processMood()
     {
-        // wait two seconds
-        yield return new WaitForSecondsRealtime(2);
-        
-        // generate data arrays
-        _keyBuffer.processNotes();
-        
-        // add logic here
-        // you can use these getters
-        // _keyBuffer.getNoteNums(); // the corresponding MIDI numbers
-        // _keyBuffer.getNoteTimeDifferences(); // difference in DateTime of when the key was pressed (ms)
-        // _keyBuffer.getNoteIntervals(); // semitones between the current and last note
-        noteNums = _keyBuffer.getNoteNums();
-        intervals = _keyBuffer.getNoteIntervals();
-        timeDiffs = _keyBuffer.getNoteTimeDifferences();
+        // call after 6 keys 
+        // have it calculate things and then pop out first command
+        // _keyBuffer.NoteIntervals; // distance in semitones from current - previous [1-4]
+        // _keyBuffer.NoteNumbers; // the MIDI number of notes [1-4]
+        // _keyBuffer.GetTimeInMillis(int index); // time interval between presses, in milliseconds
+        noteNums = _keyBuffer.NoteNumbers;
+        intervals = _keyBuffer.NoteIntervals;
+        timeDiffs = _keyBuffer.TimeDifferences;
         //Play first five notes of Twinkle Twinkle Little Star for night scene
         if ((intervals[intervals.Count - 1] == 2) && (intervals[intervals.Count - 2] == 0) &&
             (intervals[intervals.Count - 3] == 7) && (intervals[intervals.Count - 4] == 0))
@@ -112,7 +123,7 @@ public class MoodHandler : MonoBehaviour
         {
             if (noteNums.Min >= 72)
             {
-                if (timeDiffs.Max <= 250)
+                if (timeDiffs.Max.Milliseconds <= 250)
                 {
                     //a bird crosses the screen
                 }
@@ -123,7 +134,7 @@ public class MoodHandler : MonoBehaviour
             }
             else if (noteNums.Max < 60)
             {
-                if (timeDiffs.Max <= 500)
+                if (timeDiffs.Max.Milliseconds <= 500)
                 {
                     //a fox crosses the screen
                 }
@@ -134,7 +145,7 @@ public class MoodHandler : MonoBehaviour
             }
             else
             {
-                if (timeDiffs.Max <= 200)
+                if (timeDiffs.Max.Milliseconds <= 200)
                 {
                     //a squirrel crosses the screen
                 }
@@ -147,6 +158,11 @@ public class MoodHandler : MonoBehaviour
         // after scripts are called/logic is done then clear array and listen for button press again
         _keyBuffer.clearNoteBuffer();   
         hasPressedButton = false;
+        // call after 6 keys 
+        // have it calculate things and then pop out first command
+        // _keyBuffer.NoteIntervals; // distance in semitones from current - previous [1-4]
+        // _keyBuffer.NoteNumbers; // the MIDI number of notes [1-4]
+        // _keyBuffer.GetTimeInMillis(int index); // time interval between presses, in milliseconds
     }
     
 }
