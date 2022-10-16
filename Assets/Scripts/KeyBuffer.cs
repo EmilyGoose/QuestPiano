@@ -13,6 +13,7 @@ using UnityEngine;
         private List<KeyboardPress> noteBuffer;
         private List<int> noteNums;
         private List<int> noteIntervals;
+        private List<DateTime> noteTimes;
 
         public KeyBuffer()
         {
@@ -41,12 +42,21 @@ using UnityEngine;
             return noteIntervals;
         }
 
+        public List<DateTime> getNoteTimes()
+        {
+            return noteTimes;
+        }
+
         List<int> getIntervals()
         {
             // i like functional programming and i wish C# had more of this
             return noteBuffer.Select(note => note.GetInterval()).ToList();
         }
-
+        List<DateTime> getTimestamps()
+        {
+            // i like functional programming and i wish C# had more of this
+            return noteBuffer.Select(note => note.getPressTime()).ToList();
+        }
         public List<int> getNoteNumbers()
         {
             Debug.Log("counting numbers");
@@ -69,20 +79,16 @@ using UnityEngine;
             return noteNums.Min();
         }
         
-        public void processNotes(object sender, ElapsedEventArgs e)
+        public void processNotes()
         {
             Debug.Log("notes processing");
             // get averages
             if (noteBuffer.Count != 0)
             {
-                Debug.Log(noteBuffer.Count);
+                // set up arrays to be accessed
                 noteNums = getNoteNumbers();
                 noteIntervals = getIntervals();
-                foreach( var x in noteNums) Debug.Log( x.ToString());
-                foreach( var x in noteIntervals) Debug.Log( x.ToString());
-                Debug.Log(getNoteAverage());
-                Debug.Log(getNoteMax());
-                Debug.Log(getNoteMin());
+                noteTimes = getTimestamps();
 
                 // clear after all of that 
                 noteBuffer = new List<KeyboardPress>();

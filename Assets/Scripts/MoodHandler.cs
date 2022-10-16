@@ -18,7 +18,7 @@ public class MoodHandler : MonoBehaviour
         _keyBuffer = new KeyBuffer();
         _intervalTimer = new Timer(2000);
         _intervalTimer.Start();
-        _intervalTimer.Elapsed += _keyBuffer.processNotes;
+        _intervalTimer.Elapsed += processMood;
         
         // Listen for MIDI device changes
         InputSystem.onDeviceChange += (device, change) =>
@@ -48,4 +48,16 @@ public class MoodHandler : MonoBehaviour
         
     }
 
+    void processMood(object sender, ElapsedEventArgs e)
+    {
+        // updates things
+        _keyBuffer.processNotes();
+        
+        // add logic here
+        // you can use these getters
+        _keyBuffer.getNoteNums(); // the corresponding MIDI numbers
+        _keyBuffer.getNoteTimes(); // DateTime of when the key was pressed
+        _keyBuffer.getNoteIntervals(); // semitones between the current and last note
+    }
+    
 }
