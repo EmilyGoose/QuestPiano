@@ -21,8 +21,11 @@ public class MoodHandler : MonoBehaviour
     public GameObject deer;
     public GameObject birdPrefab;
 
-    // Vars for bird spawn/target - also in explorer
+    // bird spawn - also in explorer
     public GameObject birdSpawn;
+
+    // rain
+    public GameObject rainParticles;
 
     // Keep track of butterflies to scare them
     private List<GameObject> butterflyList = new List<GameObject>();
@@ -102,32 +105,33 @@ public class MoodHandler : MonoBehaviour
         List<int> intervals = _keyBuffer.NoteIntervals;
         TimeSpan[] timeDiffs = _keyBuffer.TimeDifferences;
         //Play first five notes of Twinkle Twinkle Little Star for night scene
-        if ((intervals[^1] == 2) && (intervals[^2] == 0) &&
-            (intervals[^3] == 7) && (intervals[^4] == 0))
-        {
-            if (canSpawn())
-            {
-                Debug.Log("Night");
-            }
-        }
-        //Play first five notes of Edvard Grieg's Morning Mood for day scene
-        else if ((intervals[^1] == 2) && (intervals[^2] == 2) &&
-                 (intervals[^3] == -2) && (intervals[^4] == -2))
-        {
-            if (canSpawn())
-            {
-                Debug.Log("Day");
-            }
-        }
+        // if ((intervals[^1] == 2) && (intervals[^2] == 0) &&
+        //     (intervals[^3] == 7) && (intervals[^4] == 0))
+        // {
+        //     if (canSpawn())
+        //     {
+        //         Debug.Log("Night");
+        //     }
+        // }
+        // //Play first five notes of Edvard Grieg's Morning Mood for day scene
+        // else if ((intervals[^1] == 2) && (intervals[^2] == 2) &&
+        //          (intervals[^3] == -2) && (intervals[^4] == -2))
+        // {
+        //     if (canSpawn())
+        //     {
+        //         Debug.Log("Day");
+        //     }
+        // }
         //Play five notes of ascending scale or glissando to grow a plant
-        else if ((0 <= intervals[^1] && intervals[^1] <= 2) &&
-                 (0 <= intervals[^2] && intervals[^2] <= 2) &&
-                 (0 <= intervals[^3] && intervals[^3] <= 2) &&
-                 (0 <= intervals[^4] && intervals[^4] <= 2))
+        if ((0 <= intervals[^1] && intervals[^1] <= 2) &&
+            (0 <= intervals[^2] && intervals[^2] <= 2) &&
+            (0 <= intervals[^3] && intervals[^3] <= 2) &&
+            (0 <= intervals[^4] && intervals[^4] <= 2))
         {
             if (canSpawn())
             {
-                Debug.Log("Plant");
+                Debug.Log("Rain stop");
+                rainParticles.SetActive(false);
             }
         }
         //Play five notes of ascending scale or glissando for rain
@@ -138,7 +142,8 @@ public class MoodHandler : MonoBehaviour
         {
             if (canSpawn())
             {
-                Debug.Log("Rain");
+                Debug.Log("Rain start");
+                rainParticles.SetActive(true);
             }
         }
         //Play leaps of 1 octave or greater to get a butterfly
