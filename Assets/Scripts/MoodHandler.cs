@@ -19,6 +19,10 @@ public class MoodHandler : MonoBehaviour
     public GameObject squirrel;
     public GameObject butterflyPrefab;
     public GameObject deer;
+    public GameObject birdPrefab;
+
+    // Vars for bird spawn/target - also in explorer
+    public GameObject birdSpawn;
 
     // Keep track of butterflies to scare them
     private List<GameObject> butterflyList = new List<GameObject>();
@@ -83,10 +87,8 @@ public class MoodHandler : MonoBehaviour
             _lastSpawn = Time.time;
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     void ProcessMood()
@@ -175,19 +177,13 @@ public class MoodHandler : MonoBehaviour
         {
             if (noteNums.Min() >= 72)
             {
-                if (timeDiffs.Max().Milliseconds <= 250)
+                if (canSpawn())
                 {
-                    if (canSpawn())
-                    {
-                        Debug.Log("Bird");
-                    }
-                }
-                else
-                {
-                    if (canSpawn())
-                    {
-                        Debug.Log("Cloud");
-                    }
+                    Debug.Log("Bird");
+                    // Make new bird prefab
+                    GameObject bird = Instantiate(birdPrefab, birdSpawn.transform.position, Quaternion.identity);
+                    // Kill bird after 10s
+                    Destroy(bird, 10F);
                 }
             }
             else if (noteNums.Max() < 60)
