@@ -10,88 +10,112 @@ using UnityEngine;
 
     public class KeyBuffer
     {
-        private List<KeyboardPress> noteBuffer;
-        private List<int> noteNums;
-        private List<int> noteIntervals;
-        private List<TimeSpan> noteTimeDifferences;
+        private List<KeyboardPress> _noteBuffer;
+        private List<int> _noteNumbers;
+        private List<int> _noteIntervals;
+        private List<TimeSpan> _timeDifferences;
 
         public KeyBuffer()
         {
-            noteBuffer = new List<KeyboardPress>();
+            _noteBuffer = new List<KeyboardPress>();
         }
         
-        public void addKey(MidiNoteControl note)
+        public void AddKey(MidiNoteControl note)
         {
             KeyboardPress newPress = new KeyboardPress(note);
-            noteBuffer.Add(newPress);
+            _noteBuffer.Add(newPress);
+            
             // Debug.Log("new note added");
-            // array is two or more -> set interval
-            if (noteBuffer.Count > 1)
+            // array is two or more -> set interval for the last 
+            if (_noteBuffer.Count > 1)
             {
-                noteBuffer[noteBuffer.Count - 1].SetInterval(noteBuffer[noteBuffer.Count - 2]);
+                _noteBuffer[_noteBuffer.Count - 1].SetInterval(_noteBuffer[_noteBuffer.Count - 2]);
             }
         }
-
-        public List<int> getNoteNums()
+        
+        // getters and setters/generators
+        public List<KeyboardPress> NoteBuffer
         {
-            return noteNums;
+            get { return _noteBuffer;  }
         }
 
-        public List<int> getNoteIntervals()
+        public List<int> NoteNumbers
         {
-            return noteIntervals;
+            get { return _noteNumbers;  }
         }
 
-        public List<TimeSpan> getNoteTimeDifferences()
+        public List<int> NoteIntervals
         {
-            return noteTimeDifferences;
+            get { return _noteIntervals; }
         }
 
-        List<int> calculateIntervals()
+        public List<TimeSpan> TimeDifferences
         {
-            // i like functional programming and i wish C# had more of this
-            return noteBuffer.Select(note => note.GetInterval()).ToList();
+            get { return _timeDifferences; }
         }
-        List<TimeSpan> calculateDifferences()
+
+        public int Count()
         {
-            // i like functional programming and i wish C# had more of this
-            List<DateTime> pressTimes = noteBuffer.Select(note => note.getPressTime()).ToList();
-            List<TimeSpan> pressTimeDifferences = new List<TimeSpan>(); 
+            return _noteBuffer.Count;
+        }
+
+        // helper function, gets time in milliseconds because interval is 2 seconds
+        public int GetTimeInMillis(int index)
+        {
+            return _timeDifferences[index].Milliseconds;
+        }
+
+        public void GenerateNoteNumbers()
+        {
+            _noteNumbers = _noteBuffer.Select(note => note.NoteNumber).ToList();
+        }
+
+        public void GenerateNoteIntervals()
+        {
+            _noteIntervals = _noteBuffer.Select(note => note.Interval).ToList();
+        }
+
+        public void GenerateTimeDifferences()
+        {
+            // clear just in case
+            _timeDifferences.Clear();
             
-            // time difference between first element in array and nonexistent zeroth element is always 0
-            pressTimeDifferences.Add(TimeSpan.Zero);
+            // set the first element to 0
+            _timeDifferences[0] = TimeSpan.Zero;
             
-            for (int i = 1; i < pressTimes.Count; i++)
+            // the rest will actually be calculated
+            for (var i = 1; i < 5; i++)
             {
-                // the difference in time between the current element and the previous one
-                pressTimeDifferences.Add(pressTimes[i] - pressTimes[i - 1]);
-            }
-
-            return pressTimeDifferences;
-        }
-        public List<int> calculateNoteNumbers()
-        {
-            Debug.Log("counting numbers");
-            Debug.Log(noteBuffer.Count);
-            return noteBuffer.Select(note => note.getNote().noteNumber).ToList();
-        }
-
-        public void clearNoteBuffer()
-        {
-            noteBuffer = new List<KeyboardPress>();
-        }
-
-        public void processNotes()
-        {
-            Debug.Log("notes processing");
-            // get averages
-            if (noteBuffer.Count != 0)
-            {
-                // set up arrays to be accessed
-                noteNums = calculateNoteNumbers();
-                noteIntervals = calculateIntervals();
-                noteTimeDifferences = calculateDifferences();
+                _timeDifferences[i] = _noteBuffer[i].PressTime - _noteBuffer[i - 1].PressTime;
             }
         }
+        
+        // actual helper functions
+        public void CalculateArrays()
+        {
+            GenerateNoteIntervals();
+            GenerateNoteNumbers();
+            GenerateTimeDifferences();
+        }
 
+        public void ClearArrays()
+        {
+            _noteBuffer = new List<KeyboardPress>();
+            _noteIntervals = new List<int>();
+            _noteNumbers = new List<int>();
+            _timeDifferences = new List<TimeSpan>();
+        }
+
+        // takes the first element out of the array, adds the newest to the end, 
+        // then recalculates everything
+        public KeyboardPress Enqueue(MidiNoteControl note)
+        {
+            KeyboardPress oldestNote = _noteBuffer[0];
+            _noteBuffer = _noteBuffer.Skip(1).ToList();
+            _noteBuffer[0].Interval = 0;
+            AddKey(note);
+            CalculateArrays();
+
+            return oldestNote;
+        }
     }

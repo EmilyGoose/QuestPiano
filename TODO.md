@@ -6,3 +6,6 @@ and this: https://media.discordapp.net/attachments/1025543211965501550/103074228
 	- [ ] send data to py server??
 - [ ] install jupyter notebook???????
 	- [ ] find ML models already trained owo
+
+
+
