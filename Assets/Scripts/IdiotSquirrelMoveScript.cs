@@ -13,7 +13,7 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
     private Vector3 topPosition;
     
     // Tracks which way the squirrel is moving
-    private bool goingUp = false;
+    public bool goingUp = false;
     
     // Time to transform
     private float totalMoveTime = 3F;
