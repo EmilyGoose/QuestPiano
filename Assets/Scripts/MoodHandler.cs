@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
-using Minis;
-using Unity.Template.VR;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +10,9 @@ public class MoodHandler : MonoBehaviour
     private KeyBuffer _keyBuffer;
     private bool _isListening;
     private float _timer;
+    
+    // Animals - Add in explorer
+    public GameObject squirrel;
 
     void Start()
     {
@@ -81,44 +80,44 @@ public class MoodHandler : MonoBehaviour
         List<int> intervals = _keyBuffer.NoteIntervals;
         List<TimeSpan> timeDiffs = _keyBuffer.TimeDifferences;
         //Play first five notes of Twinkle Twinkle Little Star for night scene
-        if ((intervals[intervals.Count - 1] == 2) && (intervals[intervals.Count - 2] == 0) &&
-            (intervals[intervals.Count - 3] == 7) && (intervals[intervals.Count - 4] == 0))
+        if ((intervals[^1] == 2) && (intervals[^2] == 0) &&
+            (intervals[^3] == 7) && (intervals[^4] == 0))
         {
-            //change to starry night scene
+            Debug.Log("Night");
         }
         //Play first five notes of Edvard Grieg's Morning Mood for day scene
-        else if ((intervals[intervals.Count - 1] == 2) && (intervals[intervals.Count - 2] == 2) &&
-                 (intervals[intervals.Count - 3] == -2) && (intervals[intervals.Count - 4] == -2))
+        else if ((intervals[^1] == 2) && (intervals[^2] == 2) &&
+                 (intervals[^3] == -2) && (intervals[^4] == -2))
         {
-            //change to day scene
+            Debug.Log("Day");
         }
         //Play five notes of ascending scale or glissando to grow a plant
-        else if ((0 <= intervals[intervals.Count - 1] && intervals[intervals.Count - 1] <= 4) &&
-                 (0 <= intervals[intervals.Count - 2] && intervals[intervals.Count - 2] <= 4) &&
-                 (0 <= intervals[intervals.Count - 3] && intervals[intervals.Count - 3] <= 4))
+        else if ((0 <= intervals[^1] && intervals[^1] <= 4) &&
+                 (0 <= intervals[^2] && intervals[^2] <= 4) &&
+                 (0 <= intervals[^3] && intervals[^3] <= 4))
         {
-            //grow a plant
+            Debug.Log("Plant");
         }
         //Play five notes of ascending scale or glissando for rain
-        else if ((0 >= intervals[intervals.Count - 1] && intervals[intervals.Count - 1] >= -4) &&
-                 (0 >= intervals[intervals.Count - 2] && intervals[intervals.Count - 2] >= -4) &&
-                 (0 >= intervals[intervals.Count - 3] && intervals[intervals.Count - 3] >= -4))
+        else if ((0 >= intervals[^1] && intervals[^1] >= -4) &&
+                 (0 >= intervals[^2] && intervals[^2] >= -4) &&
+                 (0 >= intervals[^3] && intervals[^3] >= -4))
         {
-            //rain
+            Debug.Log("Rain");
         }
         //Play leaps of 1 octave or greater to get a butterfly
         else if (intervals.Max() >= 12)
         {
-            //butterfly flies around
+            Debug.Log("Butterfly");
         }
         //Play cluster chords (five notes within 2 octaves within 0.1 seconds) to undo previous action
-        else if ((-12 <= intervals[intervals.Count - 1] && intervals[intervals.Count - 1] <= 12) &&
-                 (-12 <= intervals[intervals.Count - 2] && intervals[intervals.Count - 2] <= 12) &&
-                 (-12 <= intervals[intervals.Count - 3] && intervals[intervals.Count - 3] <= 12) &&
+        else if ((-12 <= intervals[^1] && intervals[^1] <= 12) &&
+                 (-12 <= intervals[^2] && intervals[^2] <= 12) &&
+                 (-12 <= intervals[^3] && intervals[^3] <= 12) &&
                  (_keyBuffer.GetTimeInMillis(timeDiffs.Count - 1) <= 100) && (_keyBuffer.GetTimeInMillis(timeDiffs.Count - 2) <= 100) &&
                  (_keyBuffer.GetTimeInMillis(timeDiffs.Count - 3) <= 100))
         {
-            //animal leaves or plant dies?
+            Debug.Log("SCAREY");
         }
         //Play high/middle/low notes quickly/slowly in any order for different animals and weather
         else
@@ -127,33 +126,36 @@ public class MoodHandler : MonoBehaviour
             {
                 if (timeDiffs.Max().Milliseconds <= 250)
                 {
-                    //a bird crosses the screen
+                    Debug.Log("Bird");
                 }
                 else
                 {
-                    //a cloud crosses the screen
+                    Debug.Log("Cloud");
                 }
             }
             else if (noteNums.Max() < 60)
             {
                 if (timeDiffs.Max().Milliseconds <= 500)
                 {
-                    //a fox crosses the screen
+                    Debug.Log("Fox time");
                 }
                 else
                 {
-                    //a deer crosses the screen
+                    Debug.Log("Deer time");
                 }
             }
             else
             {
                 if (timeDiffs.Max().Milliseconds <= 200)
                 {
-                    //a squirrel crosses the screen
+                    // squirrel go crazy
+                    // middle notes quickly
+                    squirrel.GetComponent<IdiotSquirrelMoveScript>().ChaChaSlide();
                 }
                 else
                 {
                     //a rabbit crosses the screen
+                    Debug.Log("Rabbit time");
                 }
             }
         }
