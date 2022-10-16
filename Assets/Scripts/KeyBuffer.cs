@@ -31,30 +31,40 @@ using UnityEngine;
             }
         }
 
+        public List<int> getNoteNums()
+        {
+            return noteNums;
+        }
+
+        public List<int> getNoteIntervals()
+        {
+            return noteIntervals;
+        }
+
         List<int> getIntervals()
         {
             // i like functional programming and i wish C# had more of this
             return noteBuffer.Select(note => note.GetInterval()).ToList();
         }
 
-        List<int> getNoteNumbers()
+        public List<int> getNoteNumbers()
         {
             Debug.Log("counting numbers");
             Debug.Log(noteBuffer.Count);
             return noteBuffer.Select(note => note.getNote().noteNumber).ToList();
         }
 
-        double getNoteAverage()
+        public double getNoteAverage()
         {
             return noteNums.Average();
         }
 
-        int getNoteMax()
+        public int getNoteMax()
         {
             return noteNums.Max();
         }
 
-        int getNoteMin()
+        public int getNoteMin()
         {
             return noteNums.Min();
         }

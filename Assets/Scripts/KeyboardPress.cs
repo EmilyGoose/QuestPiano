@@ -30,4 +30,9 @@ using Minis;
         {
             return note;
         }
+
+        public DateTime getPressTime()
+        {
+            return pressTime;
+        }
     }
