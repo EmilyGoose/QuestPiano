@@ -151,11 +151,9 @@ public class MoodHandler : MonoBehaviour
             }
         }
         //Play cluster chords (five notes within 2 octaves within 0.1 seconds) to undo previous action
-        else if ((-12 <= intervals[^1] && intervals[^1] <= 12) &&
-                 (-12 <= intervals[^2] && intervals[^2] <= 12) &&
-                 (-12 <= intervals[^3] && intervals[^3] <= 12) &&
-                 (_keyBuffer.GetTimeInMillis(2) <= 100) && (_keyBuffer.GetTimeInMillis(3) <= 100) &&
-                 (_keyBuffer.GetTimeInMillis(4) <= 100))
+        else if ((noteNums.Max() <= 33) &&
+                 (_keyBuffer.GetTimeInMillis(2) <= 250) && (_keyBuffer.GetTimeInMillis(3) <= 250) &&
+                 (_keyBuffer.GetTimeInMillis(4) <= 250))
         {
             if (canSpawn())
             {
@@ -167,6 +165,9 @@ public class MoodHandler : MonoBehaviour
                     // Debris time
                     Destroy(butterfly, 5F);
                 }
+
+                // Reset list to get rid of all the dead butterflies
+                butterflyList = new List<GameObject>();
             }
         }
         //Play high/middle/low notes quickly/slowly in any order for different animals and weather
