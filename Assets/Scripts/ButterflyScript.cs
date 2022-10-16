@@ -13,6 +13,7 @@ public class ButterflyScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cameraRig = FindObjectOfType<OVRCameraRig>();
         SwitchTarget();
     }
 
