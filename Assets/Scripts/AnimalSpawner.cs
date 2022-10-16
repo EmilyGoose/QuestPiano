@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class AnimalSpawner : MonoBehaviour
 {
-    public GameObject animalPrefab;
-    // Start is called before the first frame update
-    /*void Start() {
-       // Instantiate(animalPrefab)
-    }*/
+    public GameObject animalPrefab; // game object
 
-    // Update is called once per frame
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) // only spawns animals when condition is true
-        {
-            Instantiate(animalPrefab, transform.position, Quaternion.identity); // animal object is instantitated at position of spawner and rotation null
-        }    
+    public void createAnimal(GameObject spawner){ // instantiates the object at a spawner
+        Instantiate(animalPrefab, spawner.position, Quaternion.identity);
+    }
+
+    public void deleteAnimal(){ // destroys the object when called
+        Destroy(animalPrefab);
     }
 }
