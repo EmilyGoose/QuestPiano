@@ -33,10 +33,10 @@ public class KeyboardRenderer : MonoBehaviour
             GameObject newWhiteKey = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
             // x = wide, y = deep, z = long
-            newWhiteKey.transform.localScale = new Vector3(0.0231F, 0.01F, 0.133F);
+            newWhiteKey.transform.localScale = new Vector3(0.023F, 0.01F, 0.133F);
 
             // position time (keyboard scales along x axis)
-            newWhiteKey.transform.position = new Vector3(0.0231F * i - 1.2F, -0.035F, -0.12F);
+            newWhiteKey.transform.position = new Vector3(0.023F * i - 1.2F, -0.035F, -0.12F);
 
             // Apply the material
             newWhiteKey.GetComponent<MeshRenderer>().material = whiteKeyMaterial;
@@ -61,31 +61,31 @@ public class KeyboardRenderer : MonoBehaviour
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((0.1617F * (float)Math.Floor((i / 5F))) + 0.015F - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
+                    new Vector3((float)(0.161F * Math.Floor((i / 5F)) + 0.015F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 1)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.058F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
+                    new Vector3((float)((0.161F * Math.Floor(i / 5F)) + 0.058F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 2)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.087F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
+                    new Vector3((float)((0.161F * Math.Floor(i / 5F)) + 0.087F) - 1.205F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 3)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.126F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
+                    new Vector3((float)((0.161F * Math.Floor(i / 5F)) + 0.126F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
             else if ((i % 5) == 4)
             {
                 // position time (keyboard scales along x axis)
                 newBlackKey.transform.position =
-                    new Vector3((float)((0.1617F * Math.Floor(i / 5F)) + 0.152F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
+                    new Vector3((float)((0.161F * Math.Floor(i / 5F)) + 0.152F) - 1.2F, 0.005F-0.035F, 0.027F-0.12F);
             }
 
             // Apply the material
