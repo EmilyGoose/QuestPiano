@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class IdiotSquirrelMoveScript : MonoBehaviour
 {
-    
     // Vars for making squirrel cha cha slide
     private float elapsedMoveTime = 0F;
+
     // Copied this from manual pos in unity editor lol
     private Vector3 bottomPosition;
+
     // This too
     private Vector3 topPosition;
-    
+
     // Tracks which way the squirrel is moving
     private bool goingUp = false;
 
@@ -31,7 +32,7 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        elapsedMoveTime += Time.deltaTime/totalMoveTime;
+        elapsedMoveTime += Time.deltaTime / totalMoveTime;
         if (elapsedMoveTime <= totalMoveTime)
         {
             if (goingUp)
@@ -47,20 +48,28 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
         {
             if (goingUp && Time.time - timeUp > 20)
             {
-                ChaChaSlide();
+                ByeBye();
             }
         }
     }
 
     public void ChaChaSlide()
     {
-        // Flip direction
-        goingUp = !goingUp;
-        elapsedMoveTime = 0;
+        if (!goingUp)
+        {
+            goingUp = true;
+            elapsedMoveTime = 0;
 
+            timeUp = Time.time;
+        }
+    }
+
+    public void ByeBye()
+    {
         if (goingUp)
         {
-            timeUp = Time.time;
+            goingUp = false;
+            elapsedMoveTime = 0;
         }
     }
 }

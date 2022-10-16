@@ -1,14 +1,9 @@
 using Minis;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
-using Unity.VisualScripting;
-using UnityEngine;
 
-
-    public class KeyBuffer
+public class KeyBuffer
     {
         private List<KeyboardPress> _noteBuffer;
         private List<int> _noteNumbers;
@@ -29,30 +24,18 @@ using UnityEngine;
             // array is two or more -> set interval for the last 
             if (_noteBuffer.Count > 1)
             {
-                _noteBuffer[_noteBuffer.Count - 1].SetInterval(_noteBuffer[_noteBuffer.Count - 2]);
+                _noteBuffer[^1].SetInterval(_noteBuffer[^2]);
             }
         }
         
         // getters and setters/generators
-        public List<KeyboardPress> NoteBuffer
-        {
-            get { return _noteBuffer;  }
-        }
+        public List<KeyboardPress> NoteBuffer => _noteBuffer;
 
-        public List<int> NoteNumbers
-        {
-            get { return _noteNumbers;  }
-        }
+        public List<int> NoteNumbers => _noteNumbers;
 
-        public List<int> NoteIntervals
-        {
-            get { return _noteIntervals; }
-        }
+        public List<int> NoteIntervals => _noteIntervals;
 
-        public List<TimeSpan> TimeDifferences
-        {
-            get { return _timeDifferences; }
-        }
+        public List<TimeSpan> TimeDifferences => _timeDifferences;
 
         public int Count()
         {
