@@ -46,7 +46,7 @@ public class ButterflyScript : MonoBehaviour
             Vector3 dir = (position - headsetPosition).normalized;
             
             // Gotta go fast
-            position += dir * (speed * 2 * Time.deltaTime);
+            position += dir * (speed * Time.deltaTime);
             gameObject.transform.position = position;
 
             gameObject.transform.rotation = Quaternion.LookRotation(dir);

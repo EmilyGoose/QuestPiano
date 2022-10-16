@@ -128,11 +128,8 @@ public class MoodHandler : MonoBehaviour
             (0 <= intervals[^3] && intervals[^3] <= 2) &&
             (0 <= intervals[^4] && intervals[^4] <= 2))
         {
-            if (canSpawn())
-            {
-                Debug.Log("Rain stop");
-                rainParticles.SetActive(false);
-            }
+            Debug.Log("Rain stop");
+            rainParticles.SetActive(false);
         }
         //Play five notes of ascending scale or glissando for rain
         else if ((0 >= intervals[^1] && intervals[^1] >= -2) &&
@@ -140,11 +137,8 @@ public class MoodHandler : MonoBehaviour
                  (0 >= intervals[^3] && intervals[^3] >= -2) &&
                  (0 >= intervals[^4] && intervals[^4] >= -2))
         {
-            if (canSpawn())
-            {
-                Debug.Log("Rain start");
-                rainParticles.SetActive(true);
-            }
+            Debug.Log("Rain start");
+            rainParticles.SetActive(true);
         }
         //Play leaps of 1 octave or greater to get a butterfly
         else if (intervals.Max() >= 12)
