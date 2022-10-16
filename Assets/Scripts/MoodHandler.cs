@@ -17,6 +17,7 @@ public class MoodHandler : MonoBehaviour
     // Animals - Add in explorer
     public GameObject squirrel;
     public GameObject butterflyPrefab;
+    public GameObject deer;
 
     void Start()
     {
@@ -113,9 +114,10 @@ public class MoodHandler : MonoBehaviour
             }
         }
         //Play five notes of ascending scale or glissando to grow a plant
-        else if ((0 <= intervals[^1] && intervals[^1] <= 4) &&
-                 (0 <= intervals[^2] && intervals[^2] <= 4) &&
-                 (0 <= intervals[^3] && intervals[^3] <= 4))
+        else if ((0 <= intervals[^1] && intervals[^1] <= 2) &&
+                 (0 <= intervals[^2] && intervals[^2] <= 2) &&
+                 (0 <= intervals[^3] && intervals[^3] <= 2) &&
+                 (0 <= intervals[^4] && intervals[^4] <= 2))
         {
             if (canSpawn())
             {
@@ -123,9 +125,10 @@ public class MoodHandler : MonoBehaviour
             }
         }
         //Play five notes of ascending scale or glissando for rain
-        else if ((0 >= intervals[^1] && intervals[^1] >= -4) &&
-                 (0 >= intervals[^2] && intervals[^2] >= -4) &&
-                 (0 >= intervals[^3] && intervals[^3] >= -4))
+        else if ((0 >= intervals[^1] && intervals[^1] >= -2) &&
+                 (0 >= intervals[^2] && intervals[^2] >= -2) &&
+                 (0 >= intervals[^3] && intervals[^3] >= -2) &&
+                 (0 >= intervals[^4] && intervals[^4] >= -2))
         {
             if (canSpawn())
             {
@@ -176,19 +179,10 @@ public class MoodHandler : MonoBehaviour
             }
             else if (noteNums.Max() < 60)
             {
-                if (timeDiffs.Max().Milliseconds <= 500)
+                if (canSpawn())
                 {
-                    if (canSpawn())
-                    {
-                        Debug.Log("Fox time");
-                    }
-                }
-                else
-                {
-                    if (canSpawn())
-                    {
-                        Debug.Log("Deer time");
-                    }
+                    Debug.Log("Deer time");
+                    deer.GetComponent<DeerMover>().DoALap();
                 }
             }
             else
