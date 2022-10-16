@@ -13,8 +13,8 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
     private Vector3 topPosition;
     
     // Tracks which way the squirrel is moving
-    public bool goingUp = false;
-    
+    private bool goingUp = false;
+
     // Time to transform
     private float totalMoveTime = 3F;
 
@@ -23,7 +23,6 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
         bottomPosition = gameObject.transform.position;
         // y value thru trial and error dont ask
         topPosition = bottomPosition + new Vector3(0, 0.4F, 0);
-        ChaChaSlide();
     }
 
     // Update is called once per frame
