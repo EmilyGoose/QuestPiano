@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
     // Time to transform
     private float totalMoveTime = 3F;
 
+    private float timeUp = 0;
+
     void Start()
     {
         bottomPosition = gameObject.transform.position;
@@ -29,13 +32,23 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
     void Update()
     {
         elapsedMoveTime += Time.deltaTime/totalMoveTime;
-        if (goingUp)
+        if (elapsedMoveTime <= totalMoveTime)
         {
-            transform.position = Vector3.Lerp(bottomPosition, topPosition, elapsedMoveTime);
+            if (goingUp)
+            {
+                transform.position = Vector3.Lerp(bottomPosition, topPosition, elapsedMoveTime);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(topPosition, bottomPosition, elapsedMoveTime);
+            }
         }
         else
         {
-            transform.position = Vector3.Lerp(topPosition, bottomPosition, elapsedMoveTime);
+            if (goingUp && Time.time - timeUp > 20)
+            {
+                ChaChaSlide();
+            }
         }
     }
 
@@ -44,5 +57,10 @@ public class IdiotSquirrelMoveScript : MonoBehaviour
         // Flip direction
         goingUp = !goingUp;
         elapsedMoveTime = 0;
+
+        if (goingUp)
+        {
+            timeUp = Time.time;
+        }
     }
 }
