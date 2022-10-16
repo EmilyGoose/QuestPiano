@@ -140,7 +140,6 @@ public class MoodHandler : MonoBehaviour
                 Debug.Log("Butterfly");
                 // Spawn butterfly
                 Instantiate(butterflyPrefab, new Vector3(0, 2, 0), Quaternion.identity);
-                
             }
         }
         //Play cluster chords (five notes within 2 octaves within 0.1 seconds) to undo previous action
@@ -194,23 +193,12 @@ public class MoodHandler : MonoBehaviour
             }
             else
             {
-                if (timeDiffs.Max().Milliseconds <= 200)
+                if (canSpawn())
                 {
-                    if (canSpawn())
-                    {
-                        // squirrel go crazy
-                        // middle notes quickly
-                        Debug.Log("Squirrel");
-                        squirrel.GetComponent<IdiotSquirrelMoveScript>().ChaChaSlide();
-                    }
-                }
-                else
-                {
-                    if (canSpawn())
-                    {
-                        //a rabbit crosses the screen
-                        Debug.Log("Rabbit time");
-                    }
+                    // squirrel go crazy
+                    // middle notes quickly
+                    Debug.Log("Squirrel");
+                    squirrel.GetComponent<IdiotSquirrelMoveScript>().ChaChaSlide();
                 }
             }
         }

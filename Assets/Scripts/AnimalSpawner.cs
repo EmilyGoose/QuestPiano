@@ -7,7 +7,7 @@ public class AnimalSpawner : MonoBehaviour
     public GameObject animalPrefab; // game object
 
     public void createAnimal(GameObject spawner){ // instantiates the object at a spawner
-        Instantiate(animalPrefab, spawner.position, Quaternion.identity);
+        Instantiate(animalPrefab, spawner.transform.position, Quaternion.identity);
     }
 
     public void deleteAnimal(){ // destroys the object when called
