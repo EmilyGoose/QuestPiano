@@ -6,6 +6,7 @@ public class ButterflyScript : MonoBehaviour
     private Vector3 targetPosition;
     private bool flyAround = true;
     private float speed;
+    private bool scared = false;
     
     // set this in explorer
     public OVRCameraRig cameraRig;
@@ -21,19 +22,34 @@ public class ButterflyScript : MonoBehaviour
     void Update()
     {
         Vector3 position = gameObject.transform.position;
-        
-        // Unit vector to target
-        Vector3 dir = (targetPosition - position).normalized;
-
-        // Move towards target
-        position += dir * (speed * Time.deltaTime);
-        gameObject.transform.position = position;
-
-        gameObject.transform.rotation = Quaternion.LookRotation(dir);
-
-        if (Time.time * 1000 >= nextJump || (targetPosition - position).magnitude < 0.1F)
+        if (!scared)
         {
-            SwitchTarget();
+            // Unit vector to target
+            Vector3 dir = (targetPosition - position).normalized;
+
+            // Move towards target
+            position += dir * (speed * Time.deltaTime);
+            gameObject.transform.position = position;
+
+            gameObject.transform.rotation = Quaternion.LookRotation(dir);
+
+            if (Time.time * 1000 >= nextJump || (targetPosition - position).magnitude < 0.1F)
+            {
+                SwitchTarget();
+            }
+        }
+        else
+        {
+            // scared, run away
+            Vector3 headsetPosition = cameraRig.centerEyeAnchor.position;
+            // Unit vector away from player
+            Vector3 dir = (position - headsetPosition).normalized;
+            
+            // Gotta go fast
+            position += dir * (speed * 2 * Time.deltaTime);
+            gameObject.transform.position = position;
+
+            gameObject.transform.rotation = Quaternion.LookRotation(dir);
         }
     }
 
@@ -56,5 +72,10 @@ public class ButterflyScript : MonoBehaviour
         flyAround = !flyAround;
 
         gameObject.SetActive(flyAround);
+    }
+
+    public void RunAway()
+    {
+        scared = true;
     }
 }

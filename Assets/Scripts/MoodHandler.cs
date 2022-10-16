@@ -13,11 +13,15 @@ public class MoodHandler : MonoBehaviour
 
     // Spawn debounce
     private float _lastSpawn = 0;
+    private const int SPAWN_COOLDOWN = 2;
 
     // Animals - Add in explorer
     public GameObject squirrel;
     public GameObject butterflyPrefab;
     public GameObject deer;
+
+    // Keep track of butterflies to scare them
+    private List<GameObject> butterflyList = new List<GameObject>();
 
     void Start()
     {
@@ -74,7 +78,7 @@ public class MoodHandler : MonoBehaviour
 
     bool canSpawn()
     {
-        if (Time.time - _lastSpawn >= 3)
+        if (Time.time - _lastSpawn >= SPAWN_COOLDOWN)
         {
             _lastSpawn = Time.time;
             return true;
@@ -142,19 +146,27 @@ public class MoodHandler : MonoBehaviour
             {
                 Debug.Log("Butterfly");
                 // Spawn butterfly
-                Instantiate(butterflyPrefab, new Vector3(0, 2, 0), Quaternion.identity);
+                GameObject newButterfly = Instantiate(butterflyPrefab, new Vector3(0, 2, 0), Quaternion.identity);
+                butterflyList.Add(newButterfly);
             }
         }
         //Play cluster chords (five notes within 2 octaves within 0.1 seconds) to undo previous action
         else if ((-12 <= intervals[^1] && intervals[^1] <= 12) &&
                  (-12 <= intervals[^2] && intervals[^2] <= 12) &&
                  (-12 <= intervals[^3] && intervals[^3] <= 12) &&
-                 (_keyBuffer.GetTimeInMillis(4) <= 50) && (_keyBuffer.GetTimeInMillis(3) <= 50) &&
-                 (_keyBuffer.GetTimeInMillis(4) <= 50))
+                 (_keyBuffer.GetTimeInMillis(2) <= 100) && (_keyBuffer.GetTimeInMillis(3) <= 100) &&
+                 (_keyBuffer.GetTimeInMillis(4) <= 100))
         {
             if (canSpawn())
             {
                 Debug.Log("SCAREY");
+                // Scare butterflies
+                foreach (GameObject butterfly in butterflyList)
+                {
+                    butterfly.GetComponent<ButterflyScript>().RunAway();
+                    // Debris time
+                    Destroy(butterfly, 5F);
+                }
             }
         }
         //Play high/middle/low notes quickly/slowly in any order for different animals and weather

@@ -7,7 +7,7 @@ public class DeerMover : MonoBehaviour
 {
     public GameObject centerRock;
     private float angularSpeed = 50;
-    private float angle = 161;
+    private float angle = 160;
     private float radius;
 
     // Start is called before the first frame update
