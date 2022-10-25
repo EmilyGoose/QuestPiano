@@ -1,5 +1,7 @@
 # Mindful Melody VR
 
+For more info about the project, check out [the Devpost page](https://devpost.com/software/quest-piano)!
+
 ## What it does
 In the VR scene, a digital piano is mapped on top of the physical one (tracked via Quest controller). You can then play the instrument physically and see it animate in the digital world, with the world changing based on what's being played. Try different melodies and combinations of notes to see what happens!
 
